@@ -7,7 +7,7 @@ export const sum = (grid, expression) => {
   let total = 0;
   for (let row = startRow - 1; row < endRow; row++) {
     for (let col = startCol.charCodeAt(0) - 65; col <= endCol.charCodeAt(0) - 65; col++) {
-      total += Number(grid[row][col]) || 0;
+      total += Number(grid[row][col]?.value) || 0;
     }
   }
   return total;
@@ -33,7 +33,7 @@ export const max = (grid, expression) => {
   let maxVal = -Infinity;
   for (let row = startRow - 1; row < endRow; row++) {
     for (let col = startCol.charCodeAt(0) - 65; col <= endCol.charCodeAt(0) - 65; col++) {
-      const cellValue = Number(grid[row][col]);
+      const cellValue = Number(grid[row][col]?.value);
       if (!isNaN(cellValue) && cellValue > maxVal) {
         maxVal = cellValue;
       }
@@ -51,7 +51,7 @@ export const min = (grid, expression) => {
   let minVal = Infinity;
   for (let row = startRow - 1; row < endRow; row++) {
     for (let col = startCol.charCodeAt(0) - 65; col <= endCol.charCodeAt(0) - 65; col++) {
-      const cellValue = Number(grid[row][col]);
+      const cellValue = Number(grid[row][col]?.value);
       if (!isNaN(cellValue) && cellValue < minVal) {
         minVal = cellValue;
       }
@@ -69,7 +69,7 @@ export const count = (grid, expression) => {
   let count = 0;
   for (let row = startRow - 1; row < endRow; row++) {
     for (let col = startCol.charCodeAt(0) - 65; col <= endCol.charCodeAt(0) - 65; col++) {
-      if (!isNaN(grid[row][col])) {
+      if (!isNaN(grid[row][col]?.value)) {
         count++;
       }
     }
