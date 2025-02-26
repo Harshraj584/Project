@@ -1,0 +1,39 @@
+.app {
+  font-family: Arial, sans-serif;
+}
+
+.toolbar {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background-color: #f1f3f4;
+  border-bottom: 1px solid #ddd;
+}
+
+.formula-bar {
+  padding: 10px;
+  background-color: #f1f3f4;
+  border-bottom: 1px solid #ddd;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 100px;
+  height: 25px;
+  border: 1px solid #ddd;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.cell:focus {
+  outline: none;
+  border: 2px solid #1a73e8;
+}
