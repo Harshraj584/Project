@@ -8,9 +8,9 @@ import {
   max,
   min,
   count,
-} from "./utils/mathFunctions";
-import { trim, upper, lower } from "./utils/dataQualityFunctions";
-import { validateNumeric } from "./utils/validation";
+} from "./mathFunctions";
+import { trim, upper, lower } from "./dataQualityFunctions";
+import { validateNumeric } from "./validation";
 import "./App.css";
 
 const ROWS = 50;
