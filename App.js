@@ -10,7 +10,6 @@ import {
   count,
 } from "./mathFunctions";
 import { trim, upper, lower } from "./dataQualityFunctions";
-import { validateNumeric } from "./validation";
 import "./App.css";
 
 const ROWS = 50;
@@ -19,7 +18,16 @@ const COLS = 26;
 const App = () => {
   const [grid, setGrid] = useState(() => {
     const savedGrid = JSON.parse(localStorage.getItem("grid"));
-    return savedGrid || Array(ROWS).fill().map(() => Array(COLS).fill(""));
+    return (
+      savedGrid ||
+      Array(ROWS)
+        .fill()
+        .map(() =>
+          Array(COLS)
+            .fill()
+            .map(() => ({ value: "", formatting: {} }))
+        )
+    );
   });
   const [selectedCell, setSelectedCell] = useState({ row: 0, col: 0 });
 
@@ -29,7 +37,13 @@ const App = () => {
 
   const handleCellChange = (row, col, value) => {
     const newGrid = [...grid];
-    newGrid[row][col] = value;
+    newGrid[row][col] = { ...newGrid[row][col], value };
+    setGrid(newGrid);
+  };
+
+  const handleFormattingChange = (row, col, formatting) => {
+    const newGrid = [...grid];
+    newGrid[row][col] = { ...newGrid[row][col], formatting };
     setGrid(newGrid);
   };
 
@@ -39,7 +53,7 @@ const App = () => {
   };
 
   const evaluateFormula = (formula) => {
-    if (formula.startsWith("=")) {
+    if (typeof formula === "string" && formula.startsWith("=")) {
       try {
         const expression = formula.slice(1);
         if (expression.startsWith("SUM")) {
@@ -72,17 +86,15 @@ const App = () => {
     <div className="app">
       <Toolbar
         grid={grid}
-        setGrid={setGrid}
         selectedCell={selectedCell}
-        handleCellChange={handleCellChange}
+        handleFormattingChange={handleFormattingChange}
       />
       <FormulaBar
-        value={grid[selectedCell.row][selectedCell.col]}
+        value={grid[selectedCell.row][selectedCell.col].value}
         onChange={handleFormulaBarChange}
       />
       <Grid
         grid={grid}
-        setGrid={setGrid}
         selectedCell={selectedCell}
         setSelectedCell={setSelectedCell}
         handleCellChange={handleCellChange}
