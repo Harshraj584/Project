@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
-import Toolbar from "./components/Toolbar";
-import FormulaBar from "./components/FormulaBar";
-import Cell from "./components/Cell";
+import Toolbar from "./Toolbar";
+import FormulaBar from "./FormulaBar";
+import Grid from "./Grid";
+import {
+  sum,
+  average,
+  max,
+  min,
+  count,
+} from "./utils/mathFunctions";
+import { trim, upper, lower } from "./utils/dataQualityFunctions";
+import { validateNumeric } from "./utils/validation";
 import "./App.css";
 
 const ROWS = 50;
@@ -12,7 +21,6 @@ const App = () => {
     const savedGrid = JSON.parse(localStorage.getItem("grid"));
     return savedGrid || Array(ROWS).fill().map(() => Array(COLS).fill(""));
   });
-
   const [selectedCell, setSelectedCell] = useState({ row: 0, col: 0 });
 
   useEffect(() => {
@@ -34,7 +42,25 @@ const App = () => {
     if (formula.startsWith("=")) {
       try {
         const expression = formula.slice(1);
-        return eval(expression); // WARNING: Using eval is not safe for production!
+        if (expression.startsWith("SUM")) {
+          return sum(grid, expression);
+        } else if (expression.startsWith("AVERAGE")) {
+          return average(grid, expression);
+        } else if (expression.startsWith("MAX")) {
+          return max(grid, expression);
+        } else if (expression.startsWith("MIN")) {
+          return min(grid, expression);
+        } else if (expression.startsWith("COUNT")) {
+          return count(grid, expression);
+        } else if (expression.startsWith("TRIM")) {
+          return trim(grid, expression);
+        } else if (expression.startsWith("UPPER")) {
+          return upper(grid, expression);
+        } else if (expression.startsWith("LOWER")) {
+          return lower(grid, expression);
+        } else {
+          return eval(expression); // WARNING: eval is unsafe for production!
+        }
       } catch (e) {
         return "Error";
       }
@@ -44,25 +70,24 @@ const App = () => {
 
   return (
     <div className="app">
-      <Toolbar />
+      <Toolbar
+        grid={grid}
+        setGrid={setGrid}
+        selectedCell={selectedCell}
+        handleCellChange={handleCellChange}
+      />
       <FormulaBar
         value={grid[selectedCell.row][selectedCell.col]}
         onChange={handleFormulaBarChange}
       />
-      <div className="grid">
-        {grid.map((row, rowIndex) => (
-          <div key={rowIndex} className="row">
-            {row.map((cell, colIndex) => (
-              <Cell
-                key={`${rowIndex}-${colIndex}`}
-                value={evaluateFormula(cell)}
-                onChange={(value) => handleCellChange(rowIndex, colIndex, value)}
-                onFocus={() => setSelectedCell({ row: rowIndex, col: colIndex })}
-              />
-            ))}
-          </div>
-        ))}
-      </div>
+      <Grid
+        grid={grid}
+        setGrid={setGrid}
+        selectedCell={selectedCell}
+        setSelectedCell={setSelectedCell}
+        handleCellChange={handleCellChange}
+        evaluateFormula={evaluateFormula}
+      />
     </div>
   );
 };
