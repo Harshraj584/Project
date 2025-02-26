@@ -4,7 +4,6 @@ import "./Grid.css";
 
 const Grid = ({
   grid,
-  setGrid,
   selectedCell,
   setSelectedCell,
   handleCellChange,
@@ -17,7 +16,8 @@ const Grid = ({
           {row.map((cell, colIndex) => (
             <Cell
               key={`${rowIndex}-${colIndex}`}
-              value={evaluateFormula(cell)}
+              value={evaluateFormula(cell?.value || "")}
+              formatting={cell?.formatting || {}}
               onChange={(value) => handleCellChange(rowIndex, colIndex, value)}
               onFocus={() => setSelectedCell({ row: rowIndex, col: colIndex })}
               isSelected={
